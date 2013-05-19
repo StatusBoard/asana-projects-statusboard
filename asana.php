@@ -192,9 +192,12 @@ class Asana {
      *     "workspace" => 0
      * )
      *
+     * @param string $opt_fields Comma separated list of optional fields
+     *
      * @return string JSON or null
      */
-    public function getTasksByFilter($filter = array("assignee" => "", "project" => "", "workspace" => "")){
+    public function getTasksByFilter($filter = array("assignee" => "", "project" => "", "workspace" => ""), $opt_fields = ""){
+    	$opt_fields = ($opt_fields != "")?"&opt_fields={$opt_fields}":"";
         $url = "";
         $filter = array_merge(array("assignee" => "", "project" => "", "workspace" => ""), $filter);
         $url .= $filter["assignee"] != ""?"&assignee={$filter["assignee"]}":"";
@@ -202,7 +205,7 @@ class Asana {
         $url .= $filter["workspace"] != ""?"&workspace={$filter["workspace"]}":"";
         if(strlen($url) > 0) $url = "?".substr($url, 1);
 
-        return $this->askAsana($this->taskUrl.$url);
+        return $this->askAsana($this->taskUrl.$url.$opt_fields);
     }
 
     /**
